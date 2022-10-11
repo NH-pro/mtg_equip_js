@@ -5,7 +5,7 @@ import MatchSetup from "./components/MatchSetup";
 
 
 function App() {
-  const [gameData, setGameData] = useState(null);
+  const [gameCacheSettings, setGameCacheSettings] = useState(null);
 
   useEffect(() => {
     getCache()
@@ -18,7 +18,7 @@ function App() {
         cache.match('http://localhost:3000/')
           .then( async response => {
             const data = await response.json()
-            return setGameData(data)
+            return setGameCacheSettings(data)
           })
           .catch(err => {
             console.log('Error in getCache!', err)
@@ -29,8 +29,8 @@ function App() {
   return (
     <div className="App">
       <MatchSetup getCache={getCache}/>
-      {gameData && 
-        <h3>This is the current game format: {gameData.gameFormat} with {gameData.playerCount} players.</h3>
+      {gameCacheSettings && 
+        <h3>This is the current game format: {gameCacheSettings.format} with {gameCacheSettings.playerCount} players.</h3>
       }
     </div>
   );

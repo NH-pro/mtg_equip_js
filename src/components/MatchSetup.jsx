@@ -1,11 +1,11 @@
 import { useState } from 'react';
 
 function CreateMatch({getCache}) {
-    const [gameFormat, setGameFormat] = useState('Commander');
+    const [format, setFormat] = useState('Commander');
     const [playerCount, setPlayerCount] = useState(2);
 
     const gameInfo = {
-        gameFormat,
+        format,
         playerCount
     }
 
@@ -16,7 +16,7 @@ function CreateMatch({getCache}) {
         await caches.open(cacheName)
             .then((cache) => {
                 cache.put(url, data)
-                console.log('Game_Settings_Cache was created')
+                console.log('Game settings cache was updated:', gameInfo)
             });
         await getCache();
     }
@@ -27,7 +27,7 @@ function CreateMatch({getCache}) {
                 <h3>Game format?</h3>
                 <select
                     id='format_select'
-                    onChange={e => {setGameFormat(e.target.value)}}
+                    onChange={e => {setFormat(e.target.value)}}
                 >
                     <option value='Commander'>Commander</option>
                     <option value='Brawl'>Brawl</option>
