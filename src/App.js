@@ -1,5 +1,8 @@
-import CreateMatch from "./components/CreateMatch";
+// Imports
 import { useState, useEffect } from 'react';
+// Component Imports
+import CreateMatch from "./components/CreateMatch";
+
 
 function App() {
   const [gameData, setGameData] = useState(null);
@@ -19,12 +22,17 @@ function App() {
           })
       })
   }
+
+  const fetchCache = () => {
+    getCache();
+  }
+  
   return (
     <div className="App">
       {gameData && 
         <h3>This is the current game format: {gameData.gameFormat} with {gameData.playerCount} players.</h3>
       }
-      <CreateMatch />
+      <CreateMatch fetchCache={fetchCache}/>
     </div>
   );
 }
