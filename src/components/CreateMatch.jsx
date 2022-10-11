@@ -4,8 +4,8 @@ function CreateMatch() {
     const [gameFormat, setGameFormat] = useState('Commander');
     const [playerCount, setPlayerCount] = useState(2);
 
-    const gameData = {
-        format: gameFormat,
+    const gameInfo = {
+        gameFormat,
         playerCount
     }
 
@@ -36,7 +36,7 @@ function CreateMatch() {
                 <h3>How many players?</h3>
                 <select 
                     id='player_amount_select' 
-                    onChange={e => {setPlayerCount(e.target.value)}}
+                    onChange={e => {setPlayerCount(Number(e.target.value))}}
                 >
                     <option>2</option>
                     <option>3</option>
@@ -48,7 +48,7 @@ function CreateMatch() {
                 onClick={() => {confirmGameSettings(
                         'Game_Settings_Cache',
                         'http://localhost:3000/',
-                        gameData
+                        gameInfo
                     )}}
             >
                 Confirm Game Settings
