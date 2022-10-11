@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function CreateMatch({fetchCache}) {
+function CreateMatch({getCache}) {
     const [gameFormat, setGameFormat] = useState('Commander');
     const [playerCount, setPlayerCount] = useState(2);
 
@@ -18,7 +18,7 @@ function CreateMatch({fetchCache}) {
                 cache.put(url, data)
                 console.log('Game_Settings_Cache was created')
             });
-        await fetchCache();
+        await getCache();
     }
 
     return(

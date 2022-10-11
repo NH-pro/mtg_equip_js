@@ -22,17 +22,13 @@ function App() {
           })
       })
   }
-
-  const fetchCache = () => {
-    getCache();
-  }
   
   return (
     <div className="App">
       {gameData && 
         <h3>This is the current game format: {gameData.gameFormat} with {gameData.playerCount} players.</h3>
       }
-      <CreateMatch fetchCache={fetchCache}/>
+      <CreateMatch getCache={getCache}/>
     </div>
   );
 }
