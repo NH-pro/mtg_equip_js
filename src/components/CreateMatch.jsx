@@ -4,12 +4,24 @@ function CreateMatch() {
     const [gameFormat, setGameFormat] = useState('Commander');
     const [playerCount, setPlayerCount] = useState(2);
 
-    function confirmGameSettings() {
-        console.log('Hello')
+    const gameData = {
+        format: gameFormat,
+        playerCount
+    }
+
+    function confirmGameSettings(cacheName, url, response) {
+
+        const data = new Response(JSON.stringify(response));
+
+        caches.open(cacheName)
+            .then((cache) => {
+                cache.put(url, data)
+                console.log('Game_Settings_Cache was created')
+            });
     }
 
     return(
-        <>
+        <div id='game_setup_container'>
             <div>
                 <h3>Game format?</h3>
                 <select
@@ -32,8 +44,16 @@ function CreateMatch() {
                 </select>
             </div>
             <br/>
-            <button onClick={() => {confirmGameSettings()}}>Confirm Game Settings</button>
-        </>
+            <button 
+                onClick={() => {confirmGameSettings(
+                        'Game_Settings_Cache',
+                        'http://localhost:3000/',
+                        gameData
+                    )}}
+            >
+                Confirm Game Settings
+            </button>
+        </div>
     )
 }
 export default CreateMatch;
