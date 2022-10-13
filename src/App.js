@@ -22,15 +22,16 @@ function App() {
   const getCache = () => {
     caches
       .open('Game_Settings_Cache')
-      .then((cache) => {
-        cache.match('http://localhost:3000/')
-          .then( async response => {
-            const data = await response.json()
-            return setGameCacheSettings(data)
-          })
-          .catch(err => {
-            console.log('Error in getCache!', err)
-          })
+      .then( async (cache) => {
+        let cacheMatch = await cache.match('http://localhost:3000/');
+        return cacheMatch;
+      })
+      .then( async (response) => {
+        const data = await response.json()
+        return setGameCacheSettings(data)
+      })
+      .catch((err) => {
+        console.log('Error in getCache!', err)
       })
   }
   

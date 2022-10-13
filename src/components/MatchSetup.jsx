@@ -55,7 +55,8 @@ function CreateMatch({getCache}) {
             </div>
             <br/>
             <button 
-                onClick={() => {confirmGameSettings(
+                onClick={() => {
+                    confirmGameSettings(
                         'Game_Settings_Cache',
                         'http://localhost:3000/',
                         gameInfo
