@@ -20,14 +20,15 @@ function CreateMatch({getCache}) {
         4. Use .put() to add data to the selected "Game_Settings_Cache".
         5. Call "getCache" function prop to update "gameCacheSettings" state.
     */
-    async function confirmGameSettings(cacheName, url, response) {
+    const confirmGameSettings = async (cacheName, url, response) => {
         const data = new Response(JSON.stringify(response));
-        await caches.open(cacheName)
+        await caches
+            .open(cacheName)
             .then((cache) => {
                 cache.put(url, data)
                 console.log('Game settings cache was updated:', gameInfo)
             });
-        await getCache();
+        getCache();
     }
 
     return(

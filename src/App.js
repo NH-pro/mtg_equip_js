@@ -23,7 +23,7 @@ function App() {
     caches
       .open('Game_Settings_Cache')
       .then( async (cache) => {
-        let cacheMatch = await cache.match('http://localhost:3000/');
+        const cacheMatch = await cache.match('http://localhost:3000/');
         return cacheMatch;
       })
       .then( async (response) => {
