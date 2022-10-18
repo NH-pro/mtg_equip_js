@@ -7,6 +7,7 @@ import MatchSetup from "./components/MatchSetup";
 function App() {
   // Local State
   const [gameCacheSettings, setGameCacheSettings] = useState(null);
+  const [search, setSearch] = useState('');
 
   // When app loads call getCache().
   useEffect(() => {
@@ -34,7 +35,13 @@ function App() {
         console.log('Error in getCache!', err)
       })
   }
-  
+
+  const searchHandle = async () => {
+    await fetch(`https://api.magicthegathering.io/v1/cards?name=${search}`)
+      .then(response => response.json())
+      .then(data => console.log(data))
+  }
+
   return (
     <div className="App">
       {/* Pass "getCache" function as a prop to the "MatchSetup" component. */}
@@ -42,6 +49,8 @@ function App() {
       {gameCacheSettings && 
         <h3>This is the current game format: {gameCacheSettings.format} with {gameCacheSettings.playerCount} players.</h3>
       }
+      <input onChange={e => setSearch(e.target.value)} placeholder='Find Commander'/>
+      <button onClick={() => searchHandle()}>Submit</button>
     </div>
   );
 }
