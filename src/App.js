@@ -8,6 +8,7 @@ function App() {
   // Local State
   const [gameCacheSettings, setGameCacheSettings] = useState(null);
   const [search, setSearch] = useState('');
+  const [cardList, setCardList] = useState(null);
 
   // When app loads call getCache().
   useEffect(() => {
@@ -36,12 +37,30 @@ function App() {
       })
   }
 
+  /*
+    --- searchHandle function ---
+    API fetch request to "magicthegathering.io".
+    1. Await response from api endpoint for the card name we are searching with.
+    2. Convert response to json.
+    3. set the cardList state to the converted array response.
+  */
   const searchHandle = async () => {
-    await fetch(`https://api.magicthegathering.io/v1/cards?name=${search}`)
+    if(search === '') {
+      return alert("You need to enter in a card name!");
+    } else {
+      await fetch(`https://api.magicthegathering.io/v1/cards?name=${search}`)
       .then(response => response.json())
-      .then(data => console.log(data))
+      .then(data => {
+        setCardList(data.cards);
+        console.log(data.cards);
+      })
+      .catch(error => {
+        console.log('Error in card fetch request', error);
+      })
+    }
   }
 
+  // Rendered app.
   return (
     <div className="App">
       {/* Pass "getCache" function as a prop to the "MatchSetup" component. */}
@@ -51,6 +70,17 @@ function App() {
       }
       <input onChange={e => setSearch(e.target.value)} placeholder='Find Commander'/>
       <button onClick={() => searchHandle()}>Submit</button>
+      {cardList && 
+        cardList.map(card => {
+          return (
+            <ul
+              key={card.id}
+            >
+              <li>{card.name}</li>
+            </ul>
+          )
+        })
+      }
     </div>
   );
 }
