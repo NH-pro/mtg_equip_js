@@ -72,13 +72,18 @@ function App() {
       <button onClick={() => searchHandle()}>Submit</button>
       {cardList && 
         cardList.map(card => {
-          return (
-            <ul
-              key={card.id}
-            >
-              <li>{card.name}</li>
-            </ul>
-          )
+          if(card.imageUrl) {
+            return (
+              <ul
+                key={card.id}
+              >
+                <li>{card.name}</li>
+                <img src={card.imageUrl}/>
+              </ul>
+            )
+          } else {
+            return
+          }
         })
       }
     </div>
