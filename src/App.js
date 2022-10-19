@@ -9,6 +9,7 @@ function App() {
   const [gameCacheSettings, setGameCacheSettings] = useState(null);
   const [search, setSearch] = useState('');
   const [card, setCard] = useState(null);
+  const [suggestedCards, setSuggestedCards] = useState(null)
 
   // When app loads call getCache().
   useEffect(() => {
@@ -42,24 +43,53 @@ function App() {
     API fetch request to "https://api.scryfall.com".
     1. Await response from api endpoint for the card name we are searching with.
     2. Convert response to json.
-    3. set the cardList state to the converted array response.
+    3. set the cardList state to a card object.
   */
   const searchHandle = async () => {
     if(search === '') {
       return alert("You need to enter in a card name!");
     } else {
       await fetch(`https://api.scryfall.com/cards/named?fuzzy=${search}`)
-      .then( async response =>
+      .then(async response =>
         await response.json()
-        )
+      )
       .then(data => {
-        setCard(data.image_uris.art_crop);
-        console.log(data.image_uris.art_crop);
+        setCard({
+          name: data.name,
+          art: data.image_uris.art_crop
+        });
       })
       .catch(error => {
         console.log('Error in card fetch request', error);
       })
     }
+  }
+
+  const inputHandle = async (name) => {
+    setSearch(name)
+
+    if(name.length > 2) {
+      await fetch(`https://api.scryfall.com/cards/autocomplete?q=${name}`)
+      .then(async response => { 
+        return await response.json()
+      })
+      .then(response => {
+        setSuggestedCards(response.data);
+      })
+      .catch(error => {
+        console.log('Error in card name suggestion', error)
+      })
+    }
+
+    if(name.length < 2) {
+      setSuggestedCards(null);
+    }
+    if(suggestedCards){console.log(suggestedCards)};
+  }
+
+  const sugCardClickHandle = (name) => {
+    document.getElementById('search_input').value = name;
+    setSearch(name);
   }
 
   // Rendered app.
@@ -70,10 +100,27 @@ function App() {
       {gameCacheSettings && 
         <h3>This is the current game format: {gameCacheSettings.format} with {gameCacheSettings.playerCount} players.</h3>
       }
-      <input onChange={e => setSearch(e.target.value)} placeholder='Find Commander'/>
+      <input id='search_input' onChange={e => inputHandle(e.target.value)} placeholder='Find Commander'/>
       <button onClick={() => searchHandle()}>Submit</button>
-      {card && 
-        <img src={card} alt="card_img"/>
+      {suggestedCards &&
+        <ul>
+          {suggestedCards.map(sugCard => {
+            return(
+              <li 
+                key={sugCard}
+                onClick={() => sugCardClickHandle(sugCard)}
+              >
+                {sugCard}
+              </li>
+            )
+          })}
+        </ul>
+      }
+      {card &&
+        <div>
+          <h4>{card.name}</h4>
+          <img src={card.art} alt="card_img"/>
+        </div>
       }
     </div>
   );

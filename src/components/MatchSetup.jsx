@@ -24,7 +24,7 @@ function CreateMatch({getCache}) {
         const data = new Response(JSON.stringify(response));
         await caches
             .open(cacheName)
-            .then((cache) => {
+            .then(cache => {
                 cache.put(url, data)
                 console.log('Game settings cache was updated:', gameInfo)
             });
