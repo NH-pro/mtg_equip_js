@@ -89,6 +89,7 @@ function App() {
 
   const sugCardClickHandle = (name) => {
     document.getElementById('search_input').value = name;
+    inputHandle(name);
     setSearch(name);
   }
 
