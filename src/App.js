@@ -54,10 +54,18 @@ function App() {
         await response.json()
       )
       .then(data => {
-        setCard({
-          name: data.name,
-          art: data.image_uris.art_crop
-        });
+        if(data.layout !== 'transform'){
+          setCard({
+            name: data.name,
+            art: data.image_uris.art_crop
+          })
+        } else {
+          setCard({
+            name: data.name,
+            art: data.card_faces[0].image_uris.art_crop,
+            transform_art: data.card_faces[1].image_uris.art_crop
+          })
+        }
         setSuggestedCards(null);
         document.getElementById('search_input').value = '';
       })
@@ -134,7 +142,22 @@ function App() {
       {card &&
         <div>
           <h4>{card.name}</h4>
-          <img src={card.art} alt="card_img"/>
+          <img 
+            src={card.art}
+            alt="card_img"
+            style={{
+              width: '300px'
+            }}  
+          />
+          {card.transform_art &&
+            <img
+              src={card.transform_art}
+              alt="card_img"
+              style={{
+                width: '300px'
+              }} 
+            />
+          }
         </div>
       }
     </div>
