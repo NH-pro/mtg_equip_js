@@ -58,6 +58,8 @@ function App() {
           name: data.name,
           art: data.image_uris.art_crop
         });
+        setSuggestedCards(null);
+        document.getElementById('search_input').value = '';
       })
       .catch(error => {
         console.log('Error in card fetch request', error);
@@ -65,6 +67,13 @@ function App() {
     }
   }
 
+  /*
+    --- inputHandle ---
+    1. Set search state to the value in the input box.
+    2. Fetch api autocomplete suggestions from "https://api.scryfall.com" and convert to json.
+    3. Set suggestedCards state to the response.
+    4. If input value is < 2, set suggestedCards to null.
+  */
   const inputHandle = async (name) => {
     setSearch(name)
 
@@ -84,9 +93,14 @@ function App() {
     if(name.length < 2) {
       setSuggestedCards(null);
     }
-    if(suggestedCards){console.log(suggestedCards)};
   }
 
+  /*
+    --- sugCardClickHandle ---
+    1. When the user clicks on one of the suggested cards,
+        the input box value is changed to the suggested card value.
+    2. Also updates search value.
+  */
   const sugCardClickHandle = (name) => {
     document.getElementById('search_input').value = name;
     inputHandle(name);
