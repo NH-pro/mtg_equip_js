@@ -2,14 +2,19 @@
 import { useState, useEffect } from 'react';
 // Component Imports
 import MatchSetup from "./components/MatchSetup";
+// Styles Import
+import './App.css';
 
 
 function App() {
-  // Local State
+  // gameSetting state to be saved.
   const [gameCacheSettings, setGameCacheSettings] = useState(null);
+  // Input box search state.
   const [search, setSearch] = useState('');
+  // Suggested card name array state.
+  const [suggestedCards, setSuggestedCards] = useState(null);
+  // Actual selected card state.
   const [card, setCard] = useState(null);
-  const [suggestedCards, setSuggestedCards] = useState(null)
 
   // When app loads call getCache().
   useEffect(() => {
@@ -43,7 +48,7 @@ function App() {
     API fetch request to "https://api.scryfall.com".
     1. Await response from api endpoint for the card name we are searching with.
     2. Convert response to json.
-    3. set the cardList state to a card object.
+    3. Set the cardList state to a card object. If a 'transform' card, include both sides.
   */
   const searchHandle = async () => {
     if(search === '') {
@@ -54,16 +59,16 @@ function App() {
         await response.json()
       )
       .then(data => {
-        if(data.layout !== 'transform'){
-          setCard({
-            name: data.name,
-            art: data.image_uris.art_crop
-          })
-        } else {
+        if(data.layout === 'transform'){
           setCard({
             name: data.name,
             art: data.card_faces[0].image_uris.art_crop,
             transform_art: data.card_faces[1].image_uris.art_crop
+          })
+        } else {
+          setCard({
+            name: data.name,
+            art: data.image_uris.art_crop
           })
         }
         setSuggestedCards(null);
@@ -126,18 +131,19 @@ function App() {
       <input id='search_input' onChange={e => inputHandle(e.target.value)} placeholder='Find Commander'/>
       <button onClick={() => searchHandle()}>Submit</button>
       {suggestedCards &&
-        <ul>
+        <div>
           {suggestedCards.map(sugCard => {
             return(
-              <li 
+              <p
+                className="suggestion"
                 key={sugCard}
                 onClick={() => sugCardClickHandle(sugCard)}
               >
                 {sugCard}
-              </li>
+              </p>
             )
           })}
-        </ul>
+        </div>
       }
       {card &&
         <div>

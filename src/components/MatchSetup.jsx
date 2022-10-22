@@ -5,6 +5,36 @@ function CreateMatch({getCache}) {
     // Local State
     const [format, setFormat] = useState('Commander');
     const [playerCount, setPlayerCount] = useState(2);
+    const [playerArray, setPlayerArray] = useState([{name: 'blank', deck_image: 'blank'}, {name: 'blank2', deck_image: 'blank'}])
+    let comPlayers = null;
+
+
+    class Player {
+        constructor(name, deck_image) {
+            this.name = name;
+            this.deck_image = deck_image;
+
+            playerArray.forEach(player => {
+                if(player.name !== this.name) {
+                    this[`${player.name}_commander_damage`] = 0;
+                }
+            });
+        }
+    }
+
+    class CommanderPlayer extends Player {
+        constructor(name, deck_image) {
+            super(name, deck_image);
+        }
+        life = 40;
+    }
+
+
+    if(playerArray) {
+        comPlayers = playerArray.map(comPlayer => {
+            return new CommanderPlayer(comPlayer.name, comPlayer.deck_image);
+       })
+    };
 
     // gameInfo Object to save into the cache.
     const gameInfo = {
@@ -31,6 +61,14 @@ function CreateMatch({getCache}) {
         getCache();
     }
 
+    const handlePlayerAmount = (numOfPlayers) => {
+        setPlayerCount(numOfPlayers)
+        let newPlayer = {name: 'blank', deck_image: 'blank'};
+        let extraPlayers = Array(numOfPlayers).fill(newPlayer);
+        setPlayerArray(extraPlayers)
+    }
+
+    console.log(playerArray)
     return(
         <div id='game_setup_container'>
             <div>
@@ -47,7 +85,7 @@ function CreateMatch({getCache}) {
                 <h3>How many players?</h3>
                 <select 
                     id='player_amount_select' 
-                    onChange={e => {setPlayerCount(Number(e.target.value))}}
+                    onChange={e => handlePlayerAmount(Number(e.target.value))}
                 >
                     <option>2</option>
                     <option>3</option>
@@ -65,6 +103,17 @@ function CreateMatch({getCache}) {
             >
                 Confirm Game Settings
             </button>
+            {comPlayers &&
+                comPlayers.map(player => {
+                    return (
+                        <h3
+                            key={player.name}
+                        >
+                            {player.name}, {player.deck_image}, {player.life}
+                        </h3>
+                    )
+                })
+            }
         </div>
     )
 }
