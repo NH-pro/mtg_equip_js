@@ -5,13 +5,17 @@ function CreateMatch({getCache}) {
     // Local State
     const [format, setFormat] = useState('Commander');
     const [playerCount, setPlayerCount] = useState(2);
-    const [playerArray, setPlayerArray] = useState([{name: 'blank', deck_image: 'blank'}, {name: 'blank2', deck_image: 'blank'}])
+    const [playerArray, setPlayerArray] = useState([
+            {name: 'blank', playerNum: 1, deck_image: 'blank'},
+            {name: 'blank', playerNum: 2, deck_image: 'blank'}
+    ])
     let comPlayers = null;
 
 
     class Player {
         constructor(name, deck_image) {
             this.name = name;
+            this.playerNum = 0;
             this.deck_image = deck_image;
 
             playerArray.forEach(player => {
@@ -23,23 +27,28 @@ function CreateMatch({getCache}) {
     }
 
     class CommanderPlayer extends Player {
-        constructor(name, deck_image) {
-            super(name, deck_image);
-        }
         life = 40;
+    }
+    class BrawlPlayer extends Player {
+        life = 25;
     }
 
 
-    if(playerArray) {
+    if(playerArray && format === 'Commander') {
         comPlayers = playerArray.map(comPlayer => {
             return new CommanderPlayer(comPlayer.name, comPlayer.deck_image);
        })
-    };
+    } else if (playerArray && format === 'Brawl') {
+        comPlayers = playerArray.map(comPlayer => {
+            return new BrawlPlayer(comPlayer.name, comPlayer.deck_image);
+       })
+    }
 
     // gameInfo Object to save into the cache.
     const gameInfo = {
         format,
-        playerCount
+        playerCount,
+        comPlayers
     }
 
     /*
@@ -63,12 +72,11 @@ function CreateMatch({getCache}) {
 
     const handlePlayerAmount = (numOfPlayers) => {
         setPlayerCount(numOfPlayers)
-        let newPlayer = {name: 'blank', deck_image: 'blank'};
+        let newPlayer = {name: 'blank', playerNum: 0, deck_image: 'blank'};
         let extraPlayers = Array(numOfPlayers).fill(newPlayer);
         setPlayerArray(extraPlayers)
     }
 
-    console.log(playerArray)
     return(
         <div id='game_setup_container'>
             <div>
@@ -106,11 +114,16 @@ function CreateMatch({getCache}) {
             {comPlayers &&
                 comPlayers.map(player => {
                     return (
-                        <h3
-                            key={player.name}
+                        <div
+                            key={player.playerNum}
                         >
-                            {player.name}, {player.deck_image}, {player.life}
-                        </h3>
+                            <h4>Name: {player.name}</h4>
+                            <ul>
+                                <li>Player number: {player.playerNum}</li>
+                                <li>Deck image: {player.deck_image}</li>
+                                <li>Life: {player.life}</li>
+                            </ul> 
+                        </div>
                     )
                 })
             }
