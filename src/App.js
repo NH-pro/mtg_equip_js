@@ -126,7 +126,19 @@ function App() {
       {/* Pass "getCache" function as a prop to the "MatchSetup" component. */}
       <MatchSetup getCache={getCache}/>
       {gameCacheSettings && 
-        <h3>This is the current game format: {gameCacheSettings.format} with {gameCacheSettings.playerCount} players.</h3>
+        <div>
+          <h3>This is the current game format: {gameCacheSettings.format} with {gameCacheSettings.playerCount} players.</h3>
+          {gameCacheSettings.comPlayers.map(player => {
+            return (
+              <ul
+                key={player.playerNum}
+              >
+                <li>{player.name}</li>
+                <li>{player.life}</li>
+              </ul>
+            )
+          })}
+        </div>
       }
       <input id='search_input' onChange={e => inputHandle(e.target.value)} placeholder='Find Commander'/>
       <button onClick={() => searchHandle()}>Submit</button>

@@ -17,6 +17,12 @@ function CreateMatch({getCache}) {
             this.name = name;
             this.playerNum = 0;
             this.deck_image = deck_image;
+        }
+    }
+
+    class CommanderPlayer extends Player {
+        constructor(name, deck_image, playerArray) {
+            super(name, deck_image);
 
             playerArray.forEach(player => {
                 if(player.name !== this.name) {
@@ -24,11 +30,9 @@ function CreateMatch({getCache}) {
                 }
             });
         }
-    }
-
-    class CommanderPlayer extends Player {
         life = 40;
     }
+
     class BrawlPlayer extends Player {
         life = 25;
     }
@@ -36,11 +40,11 @@ function CreateMatch({getCache}) {
 
     if(playerArray && format === 'Commander') {
         comPlayers = playerArray.map(comPlayer => {
-            return new CommanderPlayer(comPlayer.name, comPlayer.deck_image);
+            return new CommanderPlayer(comPlayer.name, comPlayer.deck_image, playerArray);
        })
     } else if (playerArray && format === 'Brawl') {
         comPlayers = playerArray.map(comPlayer => {
-            return new BrawlPlayer(comPlayer.name, comPlayer.deck_image);
+            return new BrawlPlayer(comPlayer.name, comPlayer.deck_image, playerArray);
        })
     }
 
@@ -78,7 +82,12 @@ function CreateMatch({getCache}) {
     }
 
     return(
-        <div id='game_setup_container'>
+        <div 
+            id='game_setup_container'
+            style={{
+                backgroundColor: 'lightblue'
+            }}
+        >
             <div>
                 <h3>Game format?</h3>
                 <select
@@ -101,16 +110,6 @@ function CreateMatch({getCache}) {
                 </select>
             </div>
             <br/>
-            <button 
-                onClick={() => {
-                    confirmGameSettings(
-                        'Game_Settings_Cache',
-                        'http://localhost:3000/',
-                        gameInfo
-                    )}}
-            >
-                Confirm Game Settings
-            </button>
             {comPlayers &&
                 comPlayers.map(player => {
                     return (
@@ -127,6 +126,16 @@ function CreateMatch({getCache}) {
                     )
                 })
             }
+            <button 
+                onClick={() => {
+                    confirmGameSettings(
+                        'Game_Settings_Cache',
+                        'http://localhost:3000/',
+                        gameInfo
+                    )}}
+            >
+                Confirm Game Settings
+            </button>
         </div>
     )
 }
