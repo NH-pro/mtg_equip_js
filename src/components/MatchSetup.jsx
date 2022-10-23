@@ -85,7 +85,12 @@ function CreateMatch({getCache}) {
         <div 
             id='game_setup_container'
             style={{
-                backgroundColor: 'lightblue'
+                backgroundColor: 'lightblue',
+                paddingTop: '1px',
+                paddingBottom: '20px',
+                paddingLeft: '10px',
+                margin: '3px',
+                borderRadius: '5px'
             }}
         >
             <div>
@@ -123,7 +128,9 @@ function CreateMatch({getCache}) {
                                 style={{
                                     backgroundColor: 'lightcoral',
                                     margin: '3px',
-                                    padding: '2px'
+                                    padding: '3px',
+                                    borderRadius: '5px'
+                                    
                                 }}
                             >
                                 <h4>Name: {player.name}</h4>

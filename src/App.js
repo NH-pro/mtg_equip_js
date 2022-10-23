@@ -125,40 +125,7 @@ function App() {
     <div className="App">
       {/* Pass "getCache" function as a prop to the "MatchSetup" component. */}
       <MatchSetup getCache={getCache}/>
-      {gameCacheSettings && 
-        <div
-          style={{
-            backgroundColor: 'lightgreen'
-          }}
-        >
-          <h3>This is the current game format: {gameCacheSettings.format} with {gameCacheSettings.playerCount} players.</h3>
-          <div
-                style={{
-                    display:'flex'
-                }}
-            >
-              {gameCacheSettings.comPlayers.map(player => {
-                return (
-                  <div
-                    key={player.playerNum}
-                    style={{
-                        backgroundColor: 'lightgoldenrodyellow',
-                        margin: '3px',
-                        padding: '2px'
-                    }}
-                  >
-                    <h4>Name: {player.name}</h4>
-                    <ul>
-                        <li>Player number: {player.playerNum}</li>
-                        <li>Deck image: {player.deck_image}</li>
-                        <li>Life: {player.life}</li>
-                    </ul> 
-                  </div>
-                )
-              })}
-          </div>
-        </div>
-      }
+      <br/>
       <input id='search_input' onChange={e => inputHandle(e.target.value)} placeholder='Find Commander'/>
       <button onClick={() => searchHandle()}>Submit</button>
       {suggestedCards &&
@@ -195,6 +162,46 @@ function App() {
               }} 
             />
           }
+        </div>
+      }
+      {gameCacheSettings && 
+        <div
+          style={{
+            backgroundColor: 'lightgreen',
+            paddingTop: '1px',
+            paddingBottom: '20px',
+            paddingLeft: '10px',
+            margin: '3px',
+            borderRadius: '5px'
+          }}
+        >
+          <h3>Last saved game data in cache: {gameCacheSettings.format} with {gameCacheSettings.playerCount} players.</h3>
+          <div
+                style={{
+                    display:'flex'
+                }}
+            >
+              {gameCacheSettings.comPlayers.map(player => {
+                return (
+                  <div
+                    key={player.playerNum}
+                    style={{
+                        backgroundColor: 'lightgoldenrodyellow',
+                        margin: '3px',
+                        padding: '3px',
+                        borderRadius: '5px'
+                    }}
+                  >
+                    <h4>Name: {player.name}</h4>
+                    <ul>
+                        <li>Player number: {player.playerNum}</li>
+                        <li>Deck image: {player.deck_image}</li>
+                        <li>Life: {player.life}</li>
+                    </ul> 
+                  </div>
+                )
+              })}
+          </div>
         </div>
       }
     </div>
