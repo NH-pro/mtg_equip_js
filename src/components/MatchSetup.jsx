@@ -110,22 +110,33 @@ function CreateMatch({getCache}) {
                 </select>
             </div>
             <br/>
-            {comPlayers &&
-                comPlayers.map(player => {
-                    return (
-                        <div
-                            key={player.playerNum}
-                        >
-                            <h4>Name: {player.name}</h4>
-                            <ul>
-                                <li>Player number: {player.playerNum}</li>
-                                <li>Deck image: {player.deck_image}</li>
-                                <li>Life: {player.life}</li>
-                            </ul> 
-                        </div>
-                    )
-                })
-            }
+            <div
+                style={{
+                    display:'flex'
+                }}
+            >
+                {comPlayers &&
+                    comPlayers.map(player => {
+                        return (
+                            <div
+                                key={player.playerNum}
+                                style={{
+                                    backgroundColor: 'lightcoral',
+                                    margin: '3px',
+                                    padding: '2px'
+                                }}
+                            >
+                                <h4>Name: {player.name}</h4>
+                                <ul>
+                                    <li>Player number: {player.playerNum}</li>
+                                    <li>Deck image: {player.deck_image}</li>
+                                    <li>Life: {player.life}</li>
+                                </ul> 
+                            </div>
+                        )
+                    })
+                }
+            </div>
             <button 
                 onClick={() => {
                     confirmGameSettings(
