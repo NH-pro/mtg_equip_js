@@ -111,6 +111,10 @@ function CreateMatch({getCache}) {
         }
     }
 
+    const editPlayerHandle = (index, playerInfo) => {
+        console.log(`This is index: ${index} and this is player Info: ${playerInfo.playerNum}`)
+    }
+
     return(
         <div 
             id='game_setup_container'
@@ -163,6 +167,9 @@ function CreateMatch({getCache}) {
                                     borderRadius: '5px'
                                     
                                 }}
+                                onClick={() => editPlayerHandle(playerArray
+                                    .map(p => p.playerNum)
+                                    .indexOf(player.playerNum), player)}
                             >
                                 <h4>Name: {player.name}</h4>
                                 <ul>
