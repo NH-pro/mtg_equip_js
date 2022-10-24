@@ -1,58 +1,57 @@
 // Imports
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function CreateMatch({getCache}) {
     // Local State
-    const [format, setFormat] = useState('Commander');
+    const [format, setFormat] = useState(null);
     const [playerCount, setPlayerCount] = useState(2);
-    const [playerArray, setPlayerArray] = useState([
-            {name: 'blank', playerNum: 1, deck_image: 'blank'},
-            {name: 'blank', playerNum: 2, deck_image: 'blank'}
-    ])
-    let comPlayers = null;
+    const [playerArray, setPlayerArray] = useState(null)
 
-
+    // Classes
     class Player {
-        constructor(name, deck_image) {
+        constructor(name, deck_image, playerNum = 0) {
             this.name = name;
-            this.playerNum = 0;
+            this.playerNum = playerNum;
             this.deck_image = deck_image;
         }
     }
 
     class CommanderPlayer extends Player {
-        constructor(name, deck_image, playerArray) {
-            super(name, deck_image);
+        constructor(name, deck_image, playerNum) {
+            super(name, deck_image, playerNum);
 
-            playerArray.forEach(player => {
-                if(player.name !== this.name) {
-                    this[`${player.name}_commander_damage`] = 0;
+            for(let i = 1; i <= playerCount; i++) {
+                if(playerNum !== i) {
+                    this[`player_${i}_commander_damage`] = 0;
                 }
-            });
+            }
         }
         life = 40;
+        type = 'Commander';
     }
 
     class BrawlPlayer extends Player {
         life = 25;
+        type = 'Brawl';
     }
 
-
-    if(playerArray && format === 'Commander') {
-        comPlayers = playerArray.map(comPlayer => {
-            return new CommanderPlayer(comPlayer.name, comPlayer.deck_image, playerArray);
-       })
-    } else if (playerArray && format === 'Brawl') {
-        comPlayers = playerArray.map(comPlayer => {
-            return new BrawlPlayer(comPlayer.name, comPlayer.deck_image, playerArray);
-       })
-    }
+    useEffect(() => {
+        // if(playerArray.length === 0) {
+        //     let initialArray = [];
+        //     for(let i = 1; i <= playerCount; i++) {
+        //         let newPlayer = new Player('blank', 'blank', i);
+        //         initialArray.push(newPlayer);
+        //     }
+        //     return setPlayerArray(initialArray);
+        // }
+        console.log(playerArray)
+    }, [playerArray])
 
     // gameInfo Object to save into the cache.
     const gameInfo = {
         format,
         playerCount,
-        comPlayers
+        playerArray
     }
 
     /*
@@ -75,10 +74,41 @@ function CreateMatch({getCache}) {
     }
 
     const handlePlayerAmount = (numOfPlayers) => {
-        setPlayerCount(numOfPlayers)
-        let newPlayer = {name: 'blank', playerNum: 0, deck_image: 'blank'};
-        let extraPlayers = Array(numOfPlayers).fill(newPlayer);
-        setPlayerArray(extraPlayers)
+        setPlayerCount(numOfPlayers);
+
+        let extraPlayers = [];
+
+        let newPlayer = (num) => {
+            if(format === 'Commander') {
+                return new CommanderPlayer('blank', 'blank', num);
+            } else if(format === 'Brawl') {
+                return new BrawlPlayer('blank', 'blank', num);
+            } else {
+                return new Player('blank', 'blank', num)
+            }
+        };
+
+        for(let i = 1; i <= numOfPlayers; i++) {
+            extraPlayers.push(newPlayer(i))
+        }
+
+        setPlayerArray(extraPlayers);
+    }
+
+    const formatHandle = (type) => {
+        setFormat(type);
+        if(playerArray && playerArray[0].type !== type) {
+            let updateArray = playerArray.map(player => {
+                if(type === 'Commander') {
+                    return new CommanderPlayer(player.name, player.deck_image, player.playerNum);
+                } else if(type === 'Brawl') {
+                    return new BrawlPlayer(player.name, player.deck_image, player.playerNum);
+                } else {
+                    return new Player(player.name, player.deck_image, player.playerNum);
+                }
+            })
+            setPlayerArray(updateArray);
+        }
     }
 
     return(
@@ -97,8 +127,9 @@ function CreateMatch({getCache}) {
                 <h3>Game format?</h3>
                 <select
                     id='format_select'
-                    onChange={e => {setFormat(e.target.value)}}
+                    onChange={e => {formatHandle(e.target.value)}}
                 >
+                    <option value='NA'>Select a format</option>
                     <option value='Commander'>Commander</option>
                     <option value='Brawl'>Brawl</option>
                 </select>
@@ -109,6 +140,7 @@ function CreateMatch({getCache}) {
                     id='player_amount_select' 
                     onChange={e => handlePlayerAmount(Number(e.target.value))}
                 >
+                    <option>0</option>
                     <option>2</option>
                     <option>3</option>
                     <option>4</option>
@@ -120,8 +152,7 @@ function CreateMatch({getCache}) {
                     display:'flex'
                 }}
             >
-                {comPlayers &&
-                    comPlayers.map(player => {
+                {playerArray && playerArray.map(player => {
                         return (
                             <div
                                 key={player.playerNum}

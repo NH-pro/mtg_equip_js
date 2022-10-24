@@ -181,7 +181,7 @@ function App() {
                     display:'flex'
                 }}
             >
-              {gameCacheSettings.comPlayers.map(player => {
+              {gameCacheSettings.playerArray.map(player => {
                 return (
                   <div
                     key={player.playerNum}
