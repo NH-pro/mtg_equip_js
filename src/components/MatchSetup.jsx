@@ -97,7 +97,7 @@ function CreateMatch({getCache}) {
 
     const formatHandle = (type) => {
         setFormat(type);
-        if(playerArray && playerArray[0].type !== type) {
+        if(playerArray) {
             let updateArray = playerArray.map(player => {
                 if(type === 'Commander') {
                     return new CommanderPlayer(player.name, player.deck_image, player.playerNum);
@@ -109,6 +109,7 @@ function CreateMatch({getCache}) {
             })
             setPlayerArray(updateArray);
         }
+        console.log(`Format changed to ${type}!`);
     }
 
     const editPlayerHandle = (index, playerInfo) => {

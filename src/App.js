@@ -36,7 +36,7 @@ function App() {
       })
       .then( async (response) => {
         const data = await response.json()
-        return setGameCacheSettings(data)
+        setGameCacheSettings(data)
       })
       .catch((err) => {
         console.log('Error in getCache!', err)
