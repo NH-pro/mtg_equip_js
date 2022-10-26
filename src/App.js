@@ -120,6 +120,31 @@ function App() {
     setSearch(name);
   }
 
+  const sugCardFocusHandle = async (sugCard) => {
+    try {
+      const response = await fetch(`https://api.scryfall.com/cards/named?fuzzy=${sugCard}`);
+      if(response.ok) {
+        const jsonResponse = await response.json();
+        console.log(jsonResponse);
+        let newImg = document.createElement("img");
+        newImg.id = `${sugCard}_art_id`;
+        newImg.src = jsonResponse.image_uris.art_crop;
+        newImg.style = `
+          width: 200px;
+          border: solid black 5px;
+        `;
+        document.body.append(newImg);
+      }
+    } catch (error) {
+      console.log('Error in sugCardFocusHandle', error);
+    }
+  }
+
+  const sugCardMouseLeaveHandle = (sugCard) => {
+    const badElement = document.getElementById(`${sugCard}`);
+    badElement.remove();
+  }
+
   // Rendered app.
   return (
     <div className="App">
@@ -128,14 +153,24 @@ function App() {
       <br/>
       <input id='search_input' onChange={e => inputHandle(e.target.value)} placeholder='Find Commander'/>
       <button onClick={() => searchHandle()}>Submit</button>
+      <div 
+        id='sug_card_box'
+        style={{
+          position: 'absolute'
+        }}
+      >
+      </div>
       {suggestedCards &&
         <div>
           {suggestedCards.map(sugCard => {
             return(
               <p
                 className="suggestion"
+                id={sugCard.name}
                 key={sugCard}
                 onClick={() => sugCardClickHandle(sugCard)}
+                onMouseEnter={() => sugCardFocusHandle(sugCard)}
+                onMouseLeave={() => sugCardMouseLeaveHandle(`${sugCard}_art_id`)}
               >
                 {sugCard}
               </p>
