@@ -125,7 +125,6 @@ function App() {
       const response = await fetch(`https://api.scryfall.com/cards/named?fuzzy=${sugCard}`);
       if(response.ok) {
         const jsonResponse = await response.json();
-        console.log(jsonResponse);
         let newImg = document.createElement("img");
         newImg.id = `${sugCard}_art_id`;
         newImg.src = jsonResponse.image_uris.art_crop;
