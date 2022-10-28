@@ -92,8 +92,11 @@ function App() {
 
     if(name.length > 2) {
       await fetch(`https://api.scryfall.com/cards/autocomplete?q=${name}`)
-      .then(async response => { 
-        return await response.json()
+      .then(async response => {
+        if(response.ok) {
+          return await response.json()
+        }
+        throw Error('Error in inputHandle')
       })
       .then(response => {
         setSuggestedCards(response.data);
@@ -120,7 +123,8 @@ function App() {
     setSearch(name);
   }
 
-  const sugCardFocusHandle = async (sugCard) => {
+  const sugCardFocusHandle = async (sugCard, e) => {
+    console.log(e.clientX, e.clientY)
     try {
       const response = await fetch(`https://api.scryfall.com/cards/named?fuzzy=${sugCard}`);
       if(response.ok) {
@@ -131,6 +135,9 @@ function App() {
         newImg.style = `
           width: 200px;
           border: solid black 5px;
+          position: absolute;
+          top: ${e.clientX}px;
+          right: ${e.clientY}px;
         `;
         document.body.append(newImg);
       }
@@ -168,7 +175,7 @@ function App() {
                 id={sugCard.name}
                 key={sugCard}
                 onClick={() => sugCardClickHandle(sugCard)}
-                onMouseEnter={() => sugCardFocusHandle(sugCard)}
+                onMouseEnter={(e) => sugCardFocusHandle(sugCard, e)}
                 onMouseLeave={() => sugCardMouseLeaveHandle(`${sugCard}_art_id`)}
               >
                 {sugCard}
