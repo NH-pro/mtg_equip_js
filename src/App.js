@@ -136,8 +136,8 @@ function App() {
           width: 200px;
           border: solid black 5px;
           position: absolute;
-          top: ${e.clientX}px;
-          right: ${e.clientY}px;
+          top: ${e.clientY}px;
+          left: ${e.clientX}px;
         `;
         document.body.append(newImg);
       }
