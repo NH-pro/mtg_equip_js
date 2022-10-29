@@ -1,5 +1,5 @@
 // Imports
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 function CreateMatch({getCache}) {
     // Local State
@@ -34,18 +34,6 @@ function CreateMatch({getCache}) {
         life = 25;
         type = 'Brawl';
     }
-
-    useEffect(() => {
-        // if(playerArray.length === 0) {
-        //     let initialArray = [];
-        //     for(let i = 1; i <= playerCount; i++) {
-        //         let newPlayer = new Player('blank', 'blank', i);
-        //         initialArray.push(newPlayer);
-        //     }
-        //     return setPlayerArray(initialArray);
-        // }
-        console.log(playerArray)
-    }, [playerArray])
 
     // gameInfo Object to save into the cache.
     const gameInfo = {

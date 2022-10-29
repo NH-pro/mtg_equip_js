@@ -124,7 +124,6 @@ function App() {
   }
 
   const sugCardFocusHandle = async (sugCard, e) => {
-    console.log(e.clientX, e.clientY)
     try {
       const response = await fetch(`https://api.scryfall.com/cards/named?fuzzy=${sugCard}`);
       if(response.ok) {
