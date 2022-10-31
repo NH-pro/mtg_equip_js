@@ -117,17 +117,6 @@ function CreateMatch({getCache}) {
             }}
         >
             <div>
-                <h3>Game format?</h3>
-                <select
-                    id='format_select'
-                    onChange={e => {formatHandle(e.target.value)}}
-                >
-                    <option value='NA'>Select a format</option>
-                    <option value='Commander'>Commander</option>
-                    <option value='Brawl'>Brawl</option>
-                </select>
-            </div>
-            <div>
                 <h3>How many players?</h3>
                 <select 
                     id='player_amount_select' 
@@ -137,6 +126,17 @@ function CreateMatch({getCache}) {
                     <option>2</option>
                     <option>3</option>
                     <option>4</option>
+                </select>
+            </div>
+            <div>
+                <h3>Game format?</h3>
+                <select
+                    id='format_select'
+                    onChange={e => {formatHandle(e.target.value)}}
+                >
+                    <option value='NA'>Select a format</option>
+                    <option value='Commander'>Commander</option>
+                    <option value='Brawl'>Brawl</option>
                 </select>
             </div>
             <br/>
