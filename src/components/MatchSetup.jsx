@@ -1,39 +1,12 @@
 // Imports
 import { useState } from 'react';
+import { Player, CommanderPlayer, BrawlPlayer } from '../models/playerModels'
 
 function CreateMatch({getCache}) {
     // Local State
     const [format, setFormat] = useState(null);
     const [playerCount, setPlayerCount] = useState(2);
     const [playerArray, setPlayerArray] = useState(null)
-
-    // Classes
-    class Player {
-        constructor(name, deck_image, playerNum = 0) {
-            this.name = name;
-            this.playerNum = playerNum;
-            this.deck_image = deck_image;
-        }
-    }
-
-    class CommanderPlayer extends Player {
-        constructor(name, deck_image, playerNum) {
-            super(name, deck_image, playerNum);
-
-            for(let i = 1; i <= playerCount; i++) {
-                if(playerNum !== i) {
-                    this[`player_${i}_commander_damage`] = 0;
-                }
-            }
-        }
-        life = 40;
-        type = 'Commander';
-    }
-
-    class BrawlPlayer extends Player {
-        life = 25;
-        type = 'Brawl';
-    }
 
     // gameInfo Object to save into the cache.
     const gameInfo = {
@@ -68,7 +41,7 @@ function CreateMatch({getCache}) {
 
         let newPlayer = (num) => {
             if(format === 'Commander') {
-                return new CommanderPlayer('blank', 'blank', num);
+                return new CommanderPlayer('blank', 'blank', num, playerCount);
             } else if(format === 'Brawl') {
                 return new BrawlPlayer('blank', 'blank', num);
             } else {
@@ -88,7 +61,7 @@ function CreateMatch({getCache}) {
         if(playerArray) {
             let updateArray = playerArray.map(player => {
                 if(type === 'Commander') {
-                    return new CommanderPlayer(player.name, player.deck_image, player.playerNum);
+                    return new CommanderPlayer(player.name, player.deck_image, player.playerNum, playerCount);
                 } else if(type === 'Brawl') {
                     return new BrawlPlayer(player.name, player.deck_image, player.playerNum);
                 } else {
