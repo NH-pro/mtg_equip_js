@@ -1,13 +1,12 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function CardSearch() {
   // Input box search state.
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   // Suggested card name array state.
   const [suggestedCards, setSuggestedCards] = useState(null);
   // Actual selected card state.
   const [card, setCard] = useState(null);
-
 
   /*
     --- searchHandle function ---
