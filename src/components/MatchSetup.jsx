@@ -32,6 +32,8 @@ function CreateMatch({ getCache }) {
     getCache();
   };
 
+  // handlePlayerAmount function sets player state and
+  //    converts any existing players to the selected format.
   const handlePlayerAmount = (numOfPlayers) => {
     setPlayerCount(numOfPlayers);
 
