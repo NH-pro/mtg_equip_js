@@ -8,12 +8,12 @@ export default function CardSearch() {
   // Actual selected card state.
   const [card, setCard] = useState(null);
 
-  /*
-    --- searchHandle function ---
-    API fetch request to "https://api.scryfall.com".
-    1. Await response from api endpoint for the card name we are searching with.
-    2. Convert response to json.
-    3. Set the cardList state to a card object. If a 'transform' card, include both sides.
+ /**
+  * searchHandle function is a fetch request to "https://api.scryfall.com".
+  * Await response from api endpoint for the card name we are searching with.
+  * Convert response to json and set cardList to the card object.
+  * If the searched card has a "transform" type, include both card image urls.
+  * @returns  card object
   */
   const searchHandle = async () => {
     if (search === "") {

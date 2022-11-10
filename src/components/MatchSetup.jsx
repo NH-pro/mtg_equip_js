@@ -15,14 +15,12 @@ function CreateMatch({ getCache }) {
     playerArray,
   };
 
-  /*
-        --- confirmGameSettings Function ---
-        1. Async function that takes parameters of a cacheName, url, and response.
-        2. The response parameter is converted into an instance of a Response Object.
-        3. Check to see if there is a "Game_Settings_Cache", create one if not.
-        4. Use .put() to add data to the selected "Game_Settings_Cache".
-        5. Call "getCache" function prop to update "gameCacheSettings" state.
-    */
+  /**
+   * confirmGameSettings function that sets and gets cached game data.
+   * @param {*} cacheName 
+   * @param {*} url 
+   * @param {*} response 
+   */
   const confirmGameSettings = async (cacheName, url, response) => {
     const data = new Response(JSON.stringify(response));
     await caches.open(cacheName).then((cache) => {
@@ -32,8 +30,11 @@ function CreateMatch({ getCache }) {
     getCache();
   };
 
-  // handlePlayerAmount function sets player state and
-  //    converts any existing players to the selected format.
+  /**
+   * handlePlayerAmount sets player state and 
+   * converts any existing players to the selected format.
+   * @param {*} numOfPlayers 
+   */
   const handlePlayerAmount = (numOfPlayers) => {
     setPlayerCount(numOfPlayers);
 
@@ -56,6 +57,11 @@ function CreateMatch({ getCache }) {
     setPlayerArray(extraPlayers);
   };
 
+  /**
+   * formatHandle sets the game format and if there is a playerArray,
+   *  it converts all players to the new class type and sets playerArray to the new updated array.
+   * @param {*} type 
+   */
   const formatHandle = (type) => {
     setFormat(type);
     if (playerArray) {

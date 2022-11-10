@@ -13,7 +13,6 @@ function App() {
   // When app loads call getCache().
   useEffect(() => {
     getCache();
-    console.log(window.navigator.userAgent); // Detect device info?
   }, []);
 
   /* 
