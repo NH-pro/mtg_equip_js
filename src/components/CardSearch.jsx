@@ -120,12 +120,11 @@ export default function CardSearch() {
             let newImg = document.createElement("img");
             newImg.className = "sug_art";
             newImg.id = `${focusedSugCard.sugCard}_art_id`;
-            newImg.src = jsonResponse.image_uris.art_crop;
+            newImg.src = jsonResponse.image_uris.normal;
             newImg.style = `
                   width: 300px;
-                  border: solid black 3px;
-                  border-radius: 5px;
                   position: absolute;
+                  border-radius: 10px;
                   top: ${focusedSugCard.e.clientY}px;
                   left: ${Number(focusedSugCard.e.clientX) + 40}px;
                 `;
