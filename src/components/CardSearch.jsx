@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function CardSearch() {
   // Input box search state.
@@ -83,40 +83,61 @@ export default function CardSearch() {
         1. When the user clicks on one of the suggested cards,
             the input box value is changed to the suggested card value.
         2. Also updates search value.
-    */
+    */ 
   const sugCardClickHandle = (name) => {
+    focusedFetchController.abort();
+    const sugCardImages = document.getElementsByClassName("sug_art");
+    for (let sugImage of sugCardImages) {
+      sugImage.remove();
+    }
+
     document.getElementById("search_input").value = name;
     inputHandle(name);
     setSearch(name);
   };
 
-  const sugCardFocusHandle = async (sugCard, e) => {
-    try {
-      const response = await fetch(
-        `https://api.scryfall.com/cards/named?fuzzy=${sugCard}`
-      );
-      if (response.ok) {
-        const jsonResponse = await response.json();
-        let newImg = document.createElement("img");
-        newImg.className = "sug_art";
-        newImg.id = `${sugCard}_art_id`;
-        newImg.src = jsonResponse.image_uris.art_crop;
-        newImg.style = `
-              width: 300px;
-              border: solid black 3px;
-              border-radius: 5px;
-              position: absolute;
-              top: ${e.clientY}px;
-              left: ${Number(e.clientX) + 40}px;
-            `;
-        document.body.append(newImg);
-      }
-    } catch (error) {
-      console.log("Error in sugCardFocusHandle", error);
+// -------------------------------------------------------------------------------
+  const [focusedSugCard, setFocusedSugCard] = useState(null);
+  const focusedUrl = focusedSugCard !== null ? `https://api.scryfall.com/cards/named?fuzzy=${focusedSugCard.sugCard}` : null;
+  const focusedFetchController = new AbortController();
+
+  useEffect(() => {
+    if(focusedSugCard !== null) {
+      fetchFocusedSugCard(focusedSugCard)
     }
-  };
+  }, [focusedSugCard])
+
+  const sugCardFocusHandle = (sugCard, e) => {
+    setFocusedSugCard({sugCard, e});
+  }
+
+  const fetchFocusedSugCard = async() => {
+    const {signal} = focusedFetchController;
+    try {
+          const response = await fetch( focusedUrl, {signal});
+          if (response.ok) {
+            const jsonResponse = await response.json();
+            let newImg = document.createElement("img");
+            newImg.className = "sug_art";
+            newImg.id = `${focusedSugCard.sugCard}_art_id`;
+            newImg.src = jsonResponse.image_uris.art_crop;
+            newImg.style = `
+                  width: 300px;
+                  border: solid black 3px;
+                  border-radius: 5px;
+                  position: absolute;
+                  top: ${focusedSugCard.e.clientY}px;
+                  left: ${Number(focusedSugCard.e.clientX) + 40}px;
+                `;
+            document.body.append(newImg);
+          }
+        } catch (error) {
+          console.log("Error in sugCardFocusHandle", error);
+        }
+  }
 
   const sugCardMouseLeaveHandle = () => {
+    focusedFetchController.abort();
     const sugCardImages = document.getElementsByClassName("sug_art");
     for (let sugImage of sugCardImages) {
       sugImage.remove();
